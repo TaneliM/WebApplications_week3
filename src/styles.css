@@ -1,3 +1,16 @@
 body {
   font-family: sans-serif;
 }
+
+.wiki-header {
+  text-transform: capitalize;
+}
+
+.wiki-img {
+  width: 100%;
+}
+
+.wiki-item {
+  margin: 10px;
+  box-shadow: 0px 0px #333333;
+}
