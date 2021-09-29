@@ -9,42 +9,54 @@ if (document.readyState !== "loading") {
 }
 
 function initializeCode() {
-  var breeds = ["shiba", "pembroke", "samoyed", "corgi", "husky"];
-  breeds = breeds.sort(); // I'm lazy
+  var breeds = ["keeshond", "dachshund", "beagle", "corgi", "husky"];
+  breeds = breeds.sort(); // :)
 
-  for (var i = 0; i < breeds.length; i++) {
+  breeds.forEach((breed) => {
     var wikiItem = document.createElement("div");
     var wikiTitle = document.createElement("h1");
     var wikiContent = document.createElement("div");
     var wikiText = document.createElement("p");
+    var wikiImageContainer = document.createElement("div");
     var wikiImage = document.createElement("img");
 
     wikiItem.className = "wiki-item";
     wikiTitle.className = "wiki-header";
     wikiContent.className = "wiki-content";
     wikiText.className = "wiki-text";
+    wikiImageContainer.className = "img-container";
     wikiImage.className = "wiki-img";
 
-    wikiTitle.textContent = breeds[i];
+    wikiTitle.textContent = breed;
     wikiText.textContent =
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ultricies nunc libero, eget suscipit urna dapibus non. Nunc cursus hendrerit ipsum, nec viverra sem dapibus id. Aliquam luctus fermentum arcu. Proin ultrices, velit eu sagittis suscipit, magna dolor malesuada sapien, non dictum diam dolor ut ligula. Quisque a neque congue, ullamcorper leo sed, ultricies nisi. Praesent gravida, purus et interdum dictum, odio ligula tincidunt ante, pretium varius nisi urna ut mauris. Sed at accumsan ligula, at sagittis est. Etiam at vestibulum sapien, vitae sollicitudin mauris. Nam non quam eleifend, tincidunt lorem sollicitudin, pharetra sapien. Etiam eleifend justo lectus, nec eleifend justo maximus sed.";
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ultricies nunc libero, eget suscipit urna dapibus non. Nunc cursus hendrerit ipsum, nec viverra sem dapibus id. Aliquam luctus fermentum arcu. Proin ultrices, velit eu sagittis suscipit, magna dolor malesuada sapien, non dictum diam dolor ut ligula.";
 
-    let url = "https://dog.ceo/api/breed/" + breeds[i] + "/images/random";
+    let RandomImageUrl =
+      "https://dog.ceo/api/breed/" + breed + "/images/random";
+    let TextUrl = "https://en.wikipedia.org/api/rest_v1/page/summary/" + breed;
 
-    fetchImageUrl(url, wikiImage);
+    fetchImageUrl(RandomImageUrl, wikiImage);
+    fetchText(TextUrl, wikiText);
 
+    wikiImageContainer.appendChild(wikiImage);
     wikiContent.appendChild(wikiText);
-    wikiContent.appendChild(wikiImage);
+    wikiContent.appendChild(wikiImageContainer);
     wikiItem.appendChild(wikiTitle);
     wikiItem.appendChild(wikiContent);
 
     var container = document.getElementsByClassName("container");
     container[0].appendChild(wikiItem);
-  }
+  });
 }
 
 async function fetchImageUrl(url, wikiImage) {
   let response = await fetch(url);
   let image = await response.json();
   wikiImage.src = image.message;
+}
+
+async function fetchText(url, wikiText) {
+  let response = await fetch(url);
+  let data = await response.json();
+  wikiText.textContent = data.extract;
 }
